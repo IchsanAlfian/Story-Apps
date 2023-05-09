@@ -13,11 +13,7 @@ import com.ichsanalfian.mystoryapp.response.StoryResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-class StoryRepository private constructor(
-    private val userPref: UserPreference,
-    private val apiService: ApiService
-) {
+class StoryRepository private constructor(private val userPref: UserPreference, private val apiService: ApiService) {
     private val _register = MutableLiveData<RegisterResponse>()
     val register : LiveData<RegisterResponse> = _register
 
@@ -27,8 +23,17 @@ class StoryRepository private constructor(
     private val _story = MutableLiveData<StoryResponse>()
     val story : LiveData<StoryResponse> = _story
 
-    fun postRegister(name : String, email: String, password: String){
-        val client = apiService.postRegister(name, email, password)
+    suspend fun userLogout() {
+//        userPref.isUserLogin(false)
+        userPref.userLogout()
+    }
+    suspend fun userLogin() {
+//        userPref.isUserLogin(true)
+        userPref.userLogin()
+    }
+
+    fun registerRequest(name : String, email: String, password: String){
+        val client = apiService.registerRequest(name, email, password)
 
         client.enqueue(object : Callback<RegisterResponse>
         {
@@ -49,8 +54,8 @@ class StoryRepository private constructor(
             }
         })
     }
-    fun postLogin(email: String, password: String){
-        val client = apiService.postLogin(email, password)
+    fun loginRequest(email: String, password: String){
+        val client = apiService.loginRequest(email, password)
 
         client.enqueue(object : Callback<LoginResponse>
         {
@@ -71,8 +76,8 @@ class StoryRepository private constructor(
             }
         })
     }
-    fun getListStories(token : String){
-        val client = apiService.getListStories(token)
+    fun getAllStory(token : String){
+        val client = apiService.getAllStory(token)
 
         client.enqueue(object : Callback<StoryResponse>
         {
@@ -88,28 +93,19 @@ class StoryRepository private constructor(
             }
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
 //                _isLoading.value = false
-                Log.e("StoryRepositoryStoryr", "onFailure: ${t.message.toString()}")
+                Log.e("StoryRepositoryStory", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }
         })
     }
-
-    suspend fun login() {
-        userPref.login()
+    suspend fun saveUser(uModel: UserModel) {
+        userPref.saveUser(uModel)
     }
-    suspend fun saveSession(session: UserModel) {
-        userPref.saveUser(session)
-    }
-
-    suspend fun logout() {
-        userPref.logout()
-    }
-    fun getSession(): LiveData<UserModel> {
+    fun getUser(): LiveData<UserModel> {
         return userPref.getUser().asLiveData()
     }
     companion object {
         private const val TAG = "StoryRepository"
-
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(

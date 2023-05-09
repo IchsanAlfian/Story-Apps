@@ -7,21 +7,23 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
+    @GET("stories")
+    fun getAllStory(
+        @Header("Authorization") token: String
+    ):Call<StoryResponse>
+    @FormUrlEncoded
+    @POST("login")
+    fun loginRequest(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Call<LoginResponse>
     @FormUrlEncoded
     @POST("register")
-    fun postRegister(
+    fun registerRequest(
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<RegisterResponse>
-    @FormUrlEncoded
-    @POST("login")
-    fun postLogin(
-        @Field("email") email: String,
-        @Field("password") password: String
-    ): Call<LoginResponse>
-    @GET("stories")
-    fun getListStories(
-        @Header("Authorization") token: String
-    ):Call<StoryResponse>
+
+
 }

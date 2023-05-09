@@ -10,26 +10,25 @@ import com.ichsanalfian.mystoryapp.remote.StoryRepository
 import com.ichsanalfian.mystoryapp.response.LoginResponse
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val pref: StoryRepository) : ViewModel() {
+class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
     //    fun getUser(): LiveData<UserModel> {
 //        return pref.getUser().asLiveData()
 //    }
-    val login : LiveData<LoginResponse> = pref.login
-    fun postLogin(email: String, password: String) {
+    val login : LiveData<LoginResponse> = repository.login
+    fun loginRequest(email: String, password: String) {
         viewModelScope.launch {
-            pref.postLogin(email, password)
+            repository.loginRequest(email, password)
+        }
+    }
+    fun userLogin() {
+        viewModelScope.launch {
+            repository.userLogin()
+        }
+    }
+    fun saveUser(uModel: UserModel) {
+        viewModelScope.launch {
+            repository.saveUser(uModel)
         }
     }
 
-    fun saveSession(session: UserModel) {
-        viewModelScope.launch {
-            pref.saveSession(session)
-        }
-    }
-
-    fun login() {
-        viewModelScope.launch {
-            pref.login()
-        }
-    }
 }

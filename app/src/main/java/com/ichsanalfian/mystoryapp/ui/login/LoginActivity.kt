@@ -31,7 +31,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels { factory }
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var user: UserModel
+    private lateinit var userModel: UserModel
     private lateinit var factory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,60 +70,98 @@ class LoginActivity : AppCompatActivity() {
         factory = ViewModelFactory.getInstance(this)
     }
 
-    //    private fun setupAction() {
-//        binding.loginButton.setOnClickListener {
-//            val email = binding.edLoginEmail.text.toString()
-//            val password = binding.edLoginPassword.text.toString()
-//            when {
-//                email.isEmpty() -> {
-//                    binding.emailEditTextLayout.error = "Masukkan email"
+    private fun setupAction() {
+        binding.loginButton.setOnClickListener {
+            val email = binding.edLoginEmail.text.toString()
+            val password = binding.edLoginPassword.text.toString()
+            when {
+                email.isEmpty() -> {
+                    binding.emailEditTextLayout.error = "Masukkan email"
+                }
+                password.isEmpty() -> {
+                    binding.passwordEditTextLayout.error = "Masukkan password"
+                }
+//                email != user.email -> {
+//                    binding.emailEditTextLayout.error = "Email tidak sesuai"
 //                }
-//                password.isEmpty() -> {
-//                    binding.passwordEditTextLayout.error = "Masukkan password"
+//                password != user.password -> {
+//                    binding.passwordEditTextLayout.error = "Password tidak sesuai"
 //                }
-////                email != user.email -> {
-////                    binding.emailEditTextLayout.error = "Email tidak sesuai"
-////                }
-////                password != user.password -> {
-////                    binding.passwordEditTextLayout.error = "Password tidak sesuai"
-////                }
-//                else -> {
-//                    postText()
-//                    loginViewModel.login()
-//                    AlertDialog.Builder(this).apply {
-//                        setTitle("Yeah!")
-//                        setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-//                        setPositiveButton("Lanjut") { _, _ ->
+                else -> {
+//                    inputLogin()
+                    //input login
+                    loginViewModel.loginRequest(
+                        binding.edLoginEmail.text.toString(),
+                        binding.edLoginPassword.text.toString()
+                    )
+                    loginViewModel.login.observe(this@LoginActivity) {
+                        saveUser(
+                            UserModel(
+                                it.loginResult?.name.toString(),
+                                true,
+                                "Bearer " + (it.loginResult?.token.toString())
+                            )
+                        )
+                    }
+                    loginViewModel.userLogin()
+                    AlertDialog.Builder(this).apply {
+                        setTitle("Yeah!")
+                        setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                        setPositiveButton("Lanjut") { _, _ ->
 //                            val intent = Intent(context, StoryActivity::class.java)
-//                            intent.flags =
-//                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 //                            startActivity(intent)
 //                            finish()
-//                        }
-//                        create()
-//                        show()
-//                    }
-//                    moveActivity()
-//                }
-//            }
-//        }
-//    }
-    //edittttt
-    private fun setupAction() {
-        binding.apply {
-            loginButton.setOnClickListener {
-                if (edLoginEmail.length() == 0 && edLoginPassword.length() == 0) {
-//                    edLoginEmail.error = getString(R.string.required_field)
-//                    edtPassword.setError(getString(R.string.required_field), null)
-                } else if (edLoginEmail.length() != 0 && edLoginPassword.length() != 0) {
-                    postText()
-
-                    loginViewModel.login()
-                    moveActivity()
+                        }
+                        create()
+                        show()
+                    }
+                    loginViewModel.login.observe(this@LoginActivity) {
+                        if (!it.error) {
+                            startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
+                            finish()
+                        }
+                    }
                 }
             }
         }
     }
+//    edittttt
+//    private fun setupAction() {
+//        binding.apply {
+//            loginButton.setOnClickListener {
+//                if (edLoginEmail.length() == 0 && edLoginPassword.length() == 0) {
+////                    edLoginEmail.error = getString(R.string.required_field)
+////                    edtPassword.setError(getString(R.string.required_field), null)
+//                } else if (edLoginEmail.length() != 0 && edLoginPassword.length() != 0) {
+//                    //input login
+//                    loginViewModel.loginRequest(
+//                        binding.edLoginEmail.text.toString(),
+//                        binding.edLoginPassword.text.toString()
+//                    )
+//                    loginViewModel.login.observe(this@LoginActivity) {
+//                        saveUser(
+//                            UserModel(
+//                                it.loginResult?.name.toString(),
+//                                true,
+//                                "Bearer " + (it.loginResult?.token.toString())
+//                            )
+//                        )
+//                    }
+//
+//                    loginViewModel.userLogin()
+//                    //move activity
+//                    loginViewModel.login.observe(this@LoginActivity) {
+//                        if (!it.error) {
+//                            startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
+//                            finish()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
@@ -159,40 +197,8 @@ class LoginActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun moveActivity() {
-        loginViewModel.login.observe(this@LoginActivity) { response ->
-            if (!response.error) {
-                startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
-                finish()
-            }
-        }
-    }
-
-    private fun postText() {
-        binding.apply {
-            loginViewModel.postLogin(
-                edLoginEmail.text.toString(),
-                edLoginPassword.text.toString()
-            )
-        }
-        loginViewModel.login.observe(this@LoginActivity) { response ->
-            saveSession(
-                UserModel(
-                    response.loginResult?.name.toString(),
-                    true,
-                    AUTH_KEY + (response.loginResult?.token.toString())
-                )
-            )
-        }
-    }
-
-
-    private fun saveSession(session: UserModel) {
-        loginViewModel.saveSession(session)
-    }
-
-    companion object {
-        private const val AUTH_KEY = "Bearer "
+    private fun saveUser(uModel: UserModel) {
+        loginViewModel.saveUser(uModel)
     }
 
 

@@ -9,14 +9,14 @@ import com.ichsanalfian.mystoryapp.model.UserPreference
 import com.ichsanalfian.mystoryapp.remote.StoryRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val pref: StoryRepository) : ViewModel() {
+class MainViewModel(private val repository: StoryRepository) : ViewModel() {
 //    fun getUser(): LiveData<UserModel> {
 //        return pref.getUser().asLiveData()
 //    }
 
     fun logout() {
         viewModelScope.launch {
-            pref.logout()
+            repository.userLogout()
         }
     }
 

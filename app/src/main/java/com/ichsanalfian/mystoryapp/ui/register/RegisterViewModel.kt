@@ -13,7 +13,7 @@ class RegisterViewModel(private val repository: StoryRepository) : ViewModel() {
     val register : LiveData<RegisterResponse> = repository.register
     fun postRegister(name: String, email: String, password: String) {
         viewModelScope.launch {
-            repository.postRegister(name, email, password)
+            repository.registerRequest(name, email, password)
         }
     }
 }

@@ -51,9 +51,9 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
-        storyViewModel.getSession().observe(this@StoryActivity) { data ->
+        storyViewModel.getUser().observe(this@StoryActivity) { data ->
             if (data.isLogin) {
-                storyViewModel.getListStories(data.token)
+                storyViewModel.getAllStory(data.token)
             } else {
                 startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
                 finish()

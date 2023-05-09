@@ -10,19 +10,19 @@ import kotlinx.coroutines.launch
 
 class StoryViewModel(private val repository: StoryRepository) : ViewModel() {
     val story: LiveData<StoryResponse> = repository.story
-    fun getListStories(token: String) {
+    fun getAllStory(token: String) {
         viewModelScope.launch {
-            repository.getListStories(token)
+            repository.getAllStory(token)
         }
     }
 
-    fun getSession(): LiveData<UserModel> {
-        return repository.getSession()
+    fun getUser(): LiveData<UserModel> {
+        return repository.getUser()
     }
 
     fun logout() {
         viewModelScope.launch {
-            repository.logout()
+            repository.userLogout()
         }
     }
 }

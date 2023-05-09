@@ -78,8 +78,21 @@ class RegisterActivity : AppCompatActivity() {
                     binding.passwordEditTextLayout.error = "Masukkan password"
                 }
                 else -> {
-                    postText()
-                    moveActivity()
+//                    postText()
+                    //posttext
+                    registerViewModel.postRegister(
+                        binding.edRegisterName.text.toString(),
+                        binding.edRegisterEmail.text.toString(),
+                        binding.edRegisterPassword.text.toString()
+                    )
+//                    moveActivity()
+                    //moveactivity
+                    registerViewModel.register.observe(this@RegisterActivity) {
+                        if (!it.error) {
+                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                            finish()
+                        }
+                    }
 //                    registerViewModel.saveUser(UserModel(name, email, password, false))
                     AlertDialog.Builder(this).apply {
                         setTitle("Yeah!")
@@ -125,24 +138,6 @@ class RegisterActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
-    }
-    private fun moveActivity() {
-        registerViewModel.register.observe(this@RegisterActivity) { response ->
-            if (!response.error) {
-                startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                finish()
-            }
-        }
-    }
-
-    private fun postText() {
-        binding.apply {
-            registerViewModel.postRegister(
-                edRegisterName.text.toString(),
-                edRegisterEmail.text.toString(),
-                edRegisterPassword.text.toString()
-            )
-        }
     }
 
 }
