@@ -3,9 +3,13 @@ package com.ichsanalfian.mystoryapp.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import com.ichsanalfian.mystoryapp.api.ApiService
+import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.model.UserPreference
+import com.ichsanalfian.mystoryapp.response.LoginResponse
 import com.ichsanalfian.mystoryapp.response.RegisterResponse
+import com.ichsanalfian.mystoryapp.response.StoryResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,6 +20,12 @@ class StoryRepository private constructor(
 ) {
     private val _register = MutableLiveData<RegisterResponse>()
     val register : LiveData<RegisterResponse> = _register
+
+    private val _login = MutableLiveData<LoginResponse>()
+    val login : LiveData<LoginResponse> = _login
+
+    private val _story = MutableLiveData<StoryResponse>()
+    val story : LiveData<StoryResponse> = _story
 
     fun postRegister(name : String, email: String, password: String){
         val client = apiService.postRegister(name, email, password)
@@ -39,11 +49,63 @@ class StoryRepository private constructor(
             }
         })
     }
+    fun postLogin(email: String, password: String){
+        val client = apiService.postLogin(email, password)
+
+        client.enqueue(object : Callback<LoginResponse>
+        {
+            override fun onResponse(
+                call: Call<LoginResponse>,
+                response: Response<LoginResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _login.value = response.body()
+                } else {
+                    Log.e("StoryRepositoryLogin", "onFailure: ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+//                _isLoading.value = false
+                Log.e("StoryRepositoryLogin", "onFailure: ${t.message.toString()}")
+                t.printStackTrace()
+            }
+        })
+    }
+    fun getListStories(token : String){
+        val client = apiService.getListStories(token)
+
+        client.enqueue(object : Callback<StoryResponse>
+        {
+            override fun onResponse(
+                call: Call<StoryResponse>,
+                response: Response<StoryResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _story.value = response.body()
+                } else {
+                    Log.e("StoryRepositoryStory", "onFailure: ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+//                _isLoading.value = false
+                Log.e("StoryRepositoryStoryr", "onFailure: ${t.message.toString()}")
+                t.printStackTrace()
+            }
+        })
+    }
+
     suspend fun login() {
         userPref.login()
     }
+    suspend fun saveSession(session: UserModel) {
+        userPref.saveUser(session)
+    }
+
     suspend fun logout() {
         userPref.logout()
+    }
+    fun getSession(): LiveData<UserModel> {
+        return userPref.getUser().asLiveData()
     }
     companion object {
         private const val TAG = "StoryRepository"

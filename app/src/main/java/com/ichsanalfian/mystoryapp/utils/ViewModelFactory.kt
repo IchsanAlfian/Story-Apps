@@ -7,6 +7,7 @@ import com.ichsanalfian.mystoryapp.remote.StoryRepository
 import com.ichsanalfian.mystoryapp.ui.login.LoginViewModel
 import com.ichsanalfian.mystoryapp.ui.main.MainViewModel
 import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
+import com.ichsanalfian.mystoryapp.ui.story.StoryViewModel
 
 class ViewModelFactory(private val repository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -21,6 +22,9 @@ class ViewModelFactory(private val repository: StoryRepository) : ViewModelProvi
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(StoryViewModel::class.java) -> {
+                StoryViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
