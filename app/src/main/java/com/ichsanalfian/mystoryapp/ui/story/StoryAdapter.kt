@@ -1,11 +1,18 @@
 package com.ichsanalfian.mystoryapp.ui.story
 
+import android.content.Intent
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ichsanalfian.mystoryapp.databinding.ItemStoryBinding
 import com.ichsanalfian.mystoryapp.response.ListStoryItem
+import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity
+import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_DESC
+
+import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_NAME
+import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_PHOTO
 
 class StoryAdapter(private val listStory: List<ListStoryItem>) :
     RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
@@ -14,22 +21,29 @@ class StoryAdapter(private val listStory: List<ListStoryItem>) :
     }
 
     private var onItemClickCallback: OnItemClickCallback? = null
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
+//    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+//        this.onItemClickCallback = onItemClickCallback
+//    }
 
     inner class ViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(story: ListStoryItem) {
+        fun bind(storyUser: ListStoryItem) {
             binding.root.setOnClickListener {
-                onItemClickCallback?.onItemClicked(story)
+                onItemClickCallback?.onItemClicked(storyUser)
             }
             binding.apply {
-                tvItemName.text = story.name
+                tvItemName.text = storyUser.name
                 Glide.with(itemView.context)
-                    .load(story.photoUrl)
+                    .load(storyUser.photoUrl)
                     .centerCrop()
                     .into(ivItemPhoto)
+            }
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, DetailStoryActivity::class.java)
+                intent.putExtra(EXTRA_NAME, storyUser.name)
+                intent.putExtra(EXTRA_PHOTO, storyUser.photoUrl)
+                intent.putExtra(EXTRA_DESC, storyUser.description)
+                itemView.context.startActivity(intent)
             }
         }
     }

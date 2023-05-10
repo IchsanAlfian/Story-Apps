@@ -14,6 +14,7 @@ import com.ichsanalfian.mystoryapp.WelcomeActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityRegisterBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
+import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
 import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
@@ -42,6 +43,8 @@ class StoryActivity : AppCompatActivity() {
 //            )
 //        }
 //        supportActionBar?.hide()
+        supportActionBar?.title = "My Story App"
+
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //edit coba coba
@@ -60,7 +63,7 @@ class StoryActivity : AppCompatActivity() {
             if (data.isLogin) {
                 storyViewModel.getAllStory(data.token)
             } else {
-                startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
+                startActivity(Intent(this@StoryActivity, LoginActivity::class.java))
                 finish()
             }
         }
