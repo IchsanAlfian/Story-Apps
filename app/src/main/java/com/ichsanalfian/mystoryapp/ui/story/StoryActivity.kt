@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.WelcomeActivity
@@ -25,8 +26,8 @@ class StoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
-        setupViewModel()
-        setupAdapter()
+        setupViewModelAndAdapter()
+//        setupAdapter()
 //        setupAction()
     }
 
@@ -44,12 +45,16 @@ class StoryActivity : AppCompatActivity() {
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //edit coba coba
+        val layoutManager = LinearLayoutManager(this)
+
+        binding.rvStory.layoutManager = layoutManager
         binding.rvStory.setHasFixedSize(true)
-        binding.rvStory.layoutManager = LinearLayoutManager(this@StoryActivity)
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvStory.addItemDecoration(itemDecoration)
 
     }
 
-    private fun setupViewModel() {
+    private fun setupViewModelAndAdapter() {
         factory = ViewModelFactory.getInstance(this)
         storyViewModel.getUser().observe(this@StoryActivity) { data ->
             if (data.isLogin) {
@@ -58,16 +63,25 @@ class StoryActivity : AppCompatActivity() {
                 startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
                 finish()
             }
-
         }
-    }
-    private fun setupAdapter() {
         storyViewModel.story.observe(this@StoryActivity) {
             //edit ifnya nanti
-            if (it != null) {
-                binding.rvStory.adapter = StoryAdapter(it.listStory)
-            }
+            binding.rvStory.adapter = StoryAdapter(it.listStory)
+//            if (it != null) {
+//                binding.rvStory.adapter = StoryAdapter(it.listStory)
+//            }
 
         }
+
     }
+//    private fun setupAdapter() {
+//        storyViewModel.story.observe(this@StoryActivity) {
+//            //edit ifnya nanti
+//            binding.rvStory.adapter = StoryAdapter(it.listStory)
+////            if (it != null) {
+////                binding.rvStory.adapter = StoryAdapter(it.listStory)
+////            }
+//
+//        }
+//    }
 }

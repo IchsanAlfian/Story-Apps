@@ -25,11 +25,11 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
 
     suspend fun userLogout() {
 //        userPref.isUserLogin(false)
-        userPref.userLogout()
+        userPref.isUserLogin(false)
     }
     suspend fun userLogin() {
 //        userPref.isUserLogin(true)
-        userPref.userLogin()
+        userPref.isUserLogin(true)
     }
 
     fun registerRequest(name : String, email: String, password: String){

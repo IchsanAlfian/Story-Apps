@@ -23,17 +23,17 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             }
         }
     }
-    suspend fun userLogin() {
-        dataStore.edit { preferences ->
-            preferences[STATE_KEY] = true
-        }
-    }
-
-    suspend fun userLogout() {
-        dataStore.edit { preferences ->
-            preferences[STATE_KEY] = false
-        }
-    }
+//    suspend fun userLogin() {
+//        dataStore.edit { preferences ->
+//            preferences[STATE_KEY] = true
+//        }
+//    }
+//
+//    suspend fun userLogout() {
+//        dataStore.edit { preferences ->
+//            preferences[STATE_KEY] = false
+//        }
+//    }
     fun getUser(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             val name = preferences[NAME_KEY] ?: ""
