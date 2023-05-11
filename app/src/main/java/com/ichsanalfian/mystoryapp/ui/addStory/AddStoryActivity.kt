@@ -143,7 +143,7 @@ class AddStoryActivity : AppCompatActivity() {
     private fun uploadImage() {
         addStoryViewModel.getUser().observe(this){ data ->
             if (getFile != null) {
-                val file = getFile as File
+                val file = reduceFileImage(getFile as File)
 
                 val description = binding.descriptionEditText.text.toString().toRequestBody("text/plain".toMediaType())
                 val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
@@ -162,5 +162,8 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
 
+    }
+    private fun reduceFileImage(file: File): File {
+        return file
     }
 }
