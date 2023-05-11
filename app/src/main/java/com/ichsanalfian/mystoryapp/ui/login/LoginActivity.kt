@@ -78,9 +78,9 @@ class LoginActivity : AppCompatActivity() {
                 email.isEmpty() -> {
                     binding.emailEditTextLayout.error = "Masukkan email"
                 }
-                password.isEmpty() -> {
-                    binding.passwordEditTextLayout.error = "Masukkan password"
-                }
+//                password.isEmpty() -> {
+//                    binding.passwordEditTextLayout.error = "Masukkan password"
+//                }
 //                email != user.email -> {
 //                    binding.emailEditTextLayout.error = "Email tidak sesuai"
 //                }

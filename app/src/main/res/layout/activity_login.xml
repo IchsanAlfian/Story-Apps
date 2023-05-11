@@ -107,17 +107,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
-        app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.ichsanalfian.mystoryapp.ui.customView.EditTextPassword
             android:id="@+id/ed_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
 
-            android:inputType="textPassword"
-            app:passwordToggleEnabled="true"
-            tools:ignore="SpeakableTextPresentCheck" />
+             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

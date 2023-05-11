@@ -5,9 +5,11 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.ichsanalfian.mystoryapp.R
@@ -37,6 +39,8 @@ class EditTextPassword: AppCompatEditText,View.OnTouchListener {
     }
 
     private fun init() {
+        inputType = EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
+        transformationMethod = PasswordTransformationMethod()
         // Menginisialisasi gambar clear button
         clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
 
@@ -54,7 +58,8 @@ class EditTextPassword: AppCompatEditText,View.OnTouchListener {
             }
 
             override fun afterTextChanged(s: Editable) {
-                // Do nothing.
+                if (s.toString().length < 8) error = "Password must minimum 8"
+
             }
         })
     }

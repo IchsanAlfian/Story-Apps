@@ -6,6 +6,7 @@ import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.Camera
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,10 +24,7 @@ import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityAddStoryBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
-import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
-import com.ichsanalfian.mystoryapp.utils.createCustomTempFile
-import com.ichsanalfian.mystoryapp.utils.rotateFile
-import com.ichsanalfian.mystoryapp.utils.uriToFile
+import com.ichsanalfian.mystoryapp.utils.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -102,7 +100,8 @@ class AddStoryActivity : AppCompatActivity() {
             val myFile = File(currentPhotoPath)
             myFile.let { file ->
           //Silakan gunakan kode ini jika mengalami perubahan rotasi
-          rotateFile(file)
+                val isBackCamera = Camera.CameraInfo.CAMERA_FACING_BACK == 0
+          rotateFile(file, isBackCamera)
                 getFile = file
                 binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
@@ -166,7 +165,7 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
     }
-    private fun reduceFileImage(file: File): File {
-        return file
-    }
+//    private fun reduceFileImage(file: File): File {
+//        return file
+//    }
 }
