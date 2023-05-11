@@ -18,12 +18,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityAddStoryBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 import com.ichsanalfian.mystoryapp.utils.createCustomTempFile
+import com.ichsanalfian.mystoryapp.utils.rotateFile
 import com.ichsanalfian.mystoryapp.utils.uriToFile
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -51,7 +53,7 @@ class AddStoryActivity : AppCompatActivity() {
         binding.cameraButton.setOnClickListener { startTakePhoto() }
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener {
-            uploadImage()
+            uploadStory()
         }
 
     }
@@ -98,10 +100,9 @@ class AddStoryActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
-
             myFile.let { file ->
-//          Silakan gunakan kode ini jika mengalami perubahan rotasi
-//          rotateFile(file)
+          //Silakan gunakan kode ini jika mengalami perubahan rotasi
+          rotateFile(file)
                 getFile = file
                 binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
@@ -140,11 +141,10 @@ class AddStoryActivity : AppCompatActivity() {
         val chooser = Intent.createChooser(intent, "Silahkan Pilih Gambar")
         launcherIntentGallery.launch(chooser)
     }
-    private fun uploadImage() {
+    private fun uploadStory() {
         addStoryViewModel.getUser().observe(this){ data ->
             if (getFile != null) {
                 val file = reduceFileImage(getFile as File)
-
                 val description = binding.descriptionEditText.text.toString().toRequestBody("text/plain".toMediaType())
                 val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
                 val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
@@ -153,10 +153,13 @@ class AddStoryActivity : AppCompatActivity() {
                     requestImageFile
                 )
                 addStoryViewModel.uploadStoryRequest(imageMultipart,description,data.token)
-                startActivity(Intent(this@AddStoryActivity, StoryActivity::class.java))
-                finish()
-
-
+                addStoryViewModel.upload.observe(this){response ->
+                    if (!response.error){
+                        startActivity(Intent(this@AddStoryActivity, StoryActivity::class.java))
+                    }else{
+                        Toast.makeText(this, response.error.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
             } else {
                 Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
             }

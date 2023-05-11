@@ -20,7 +20,7 @@ class StoryViewModel(private val repository: StoryRepository) : ViewModel() {
         return repository.getUser()
     }
 
-    fun logout() {
+    fun userLogout() {
         viewModelScope.launch {
             repository.userLogout()
         }

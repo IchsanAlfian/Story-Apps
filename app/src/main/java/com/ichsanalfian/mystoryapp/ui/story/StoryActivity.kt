@@ -72,7 +72,7 @@ class StoryActivity : AppCompatActivity() {
                 true
             }
             R.id.action_logout-> {
-                storyViewModel.logout()
+                storyViewModel.userLogout()
                 Toast.makeText(this, "logout ini", Toast.LENGTH_SHORT).show()
                 true
             }
