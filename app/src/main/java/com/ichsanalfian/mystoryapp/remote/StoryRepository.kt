@@ -1,15 +1,19 @@
 package com.ichsanalfian.mystoryapp.remote
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.ichsanalfian.mystoryapp.api.ApiService
 import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.model.UserPreference
+import com.ichsanalfian.mystoryapp.response.AddStoryResponse
 import com.ichsanalfian.mystoryapp.response.LoginResponse
 import com.ichsanalfian.mystoryapp.response.RegisterResponse
 import com.ichsanalfian.mystoryapp.response.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +26,9 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
 
     private val _story = MutableLiveData<StoryResponse>()
     val story : LiveData<StoryResponse> = _story
+
+    private val _upload= MutableLiveData<AddStoryResponse>()
+    val upload : LiveData<AddStoryResponse> = _upload
 
     suspend fun userLogout() {
 //        userPref.isUserLogin(false)
@@ -72,6 +79,27 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
 //                _isLoading.value = false
                 Log.e("StoryRepositoryLogin", "onFailure: ${t.message.toString()}")
+                t.printStackTrace()
+            }
+        })
+    }
+    fun uploadStoryRequest(image : MultipartBody.Part, desc :RequestBody,token : String){
+        val client = apiService.addStory(image,desc,token)
+        client.enqueue(object : Callback<AddStoryResponse>
+        {
+            override fun onResponse(
+                call: Call<AddStoryResponse>,
+                response: Response<AddStoryResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _upload.value = response.body()
+                } else {
+                    Log.e("StoryRepositoryLogin", "onFailure: ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
+//                _isLoading.value = false
+                Log.e("StoryRepositoryUpload", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }
         })

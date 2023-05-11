@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,11 +71,11 @@ class StoryActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-//            R.id.logoutButton-> {
-//                val intent = Intent(this, SettingActivity::class.java)
-//                startActivity(intent)
-//                true
-//            }
+            R.id.action_logout-> {
+                storyViewModel.logout()
+                Toast.makeText(this, "logout ini", Toast.LENGTH_SHORT).show()
+                true
+            }
             else -> true
         }
     }

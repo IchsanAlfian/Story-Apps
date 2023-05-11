@@ -13,13 +13,14 @@ import kotlinx.coroutines.withContext
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
     suspend fun isUserLogin(state : Boolean){
-        if(state){
-            dataStore.edit { preferences ->
-                preferences[STATE_KEY] = true
+        if(!state){
+            dataStore.edit {
+                it.clear()
             }
+
         }else{
             dataStore.edit { preferences ->
-                preferences[STATE_KEY] = false
+                preferences[STATE_KEY] = true
             }
         }
     }

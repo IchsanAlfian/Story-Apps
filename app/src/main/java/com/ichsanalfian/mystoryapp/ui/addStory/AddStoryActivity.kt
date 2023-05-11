@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -20,13 +21,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityAddStoryBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
+import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
+import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 import com.ichsanalfian.mystoryapp.utils.createCustomTempFile
 import com.ichsanalfian.mystoryapp.utils.uriToFile
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
+    private val addStoryViewModel: AddStoryViewModel by viewModels { factory }
     private lateinit var currentPhotoPath: String
     private lateinit var binding: ActivityAddStoryBinding
+    private var getFile: File? = null
+    private lateinit var factory: ViewModelFactory
+
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
@@ -35,10 +46,17 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupView()
         requestPermission()
+        setupViewModel()
 
         binding.cameraButton.setOnClickListener { startTakePhoto() }
         binding.galleryButton.setOnClickListener { startGallery() }
+        binding.uploadButton.setOnClickListener {
+            uploadImage()
+        }
 
+    }
+    private fun setupViewModel() {
+        factory = ViewModelFactory.getInstance(this)
     }
 
     private fun setupView() {
@@ -84,6 +102,7 @@ class AddStoryActivity : AppCompatActivity() {
             myFile.let { file ->
 //          Silakan gunakan kode ini jika mengalami perubahan rotasi
 //          rotateFile(file)
+                getFile = file
                 binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
         }
@@ -109,6 +128,7 @@ class AddStoryActivity : AppCompatActivity() {
             val selectedImg = result.data?.data as Uri
             selectedImg.let { uri ->
                 val myFile = uriToFile(uri, this@AddStoryActivity)
+                getFile = myFile
                 binding.previewImageView.setImageURI(uri)
             }
         }
@@ -119,5 +139,28 @@ class AddStoryActivity : AppCompatActivity() {
         intent.type = "image/*"
         val chooser = Intent.createChooser(intent, "Silahkan Pilih Gambar")
         launcherIntentGallery.launch(chooser)
+    }
+    private fun uploadImage() {
+        addStoryViewModel.getUser().observe(this){ data ->
+            if (getFile != null) {
+                val file = getFile as File
+
+                val description = binding.descriptionEditText.text.toString().toRequestBody("text/plain".toMediaType())
+                val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
+                val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                    "photo",
+                    file.name,
+                    requestImageFile
+                )
+                addStoryViewModel.uploadStoryRequest(imageMultipart,description,data.token)
+                startActivity(Intent(this@AddStoryActivity, StoryActivity::class.java))
+                finish()
+
+
+            } else {
+                Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 }
