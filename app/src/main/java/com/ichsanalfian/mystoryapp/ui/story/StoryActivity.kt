@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -14,6 +16,7 @@ import com.ichsanalfian.mystoryapp.WelcomeActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityRegisterBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
+import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryActivity
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
 import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
@@ -30,6 +33,10 @@ class StoryActivity : AppCompatActivity() {
         setupViewModelAndAdapter()
 //        setupAdapter()
 //        setupAction()
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_story, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun setupView() {
@@ -55,6 +62,21 @@ class StoryActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
 
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.button_add -> {
+                val intent = Intent(this, AddStoryActivity::class.java)
+                startActivity(intent)
+                true
+            }
+//            R.id.logoutButton-> {
+//                val intent = Intent(this, SettingActivity::class.java)
+//                startActivity(intent)
+//                true
+//            }
+            else -> true
+        }
     }
 
     private fun setupViewModelAndAdapter() {
