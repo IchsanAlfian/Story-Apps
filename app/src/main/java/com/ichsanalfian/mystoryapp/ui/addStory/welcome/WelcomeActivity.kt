@@ -1,4 +1,4 @@
-package com.ichsanalfian.mystoryapp
+package com.ichsanalfian.mystoryapp.ui.addStory.welcome
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -59,14 +59,14 @@ class WelcomeActivity : AppCompatActivity() {
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(500)
         val signup = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(500)
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
-        val desc = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(500)
+//        val desc = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(500)
 
         val together = AnimatorSet().apply {
             playTogether(login, signup)
         }
 
         AnimatorSet().apply {
-            playSequentially(title, desc, together)
+            playSequentially(title,  together)
             start()
         }
     }

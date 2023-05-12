@@ -15,7 +15,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.ichsanalfian.mystoryapp.WelcomeActivity
+import com.ichsanalfian.mystoryapp.ui.addStory.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAction()
-        playAnimation()
     }
 
     private fun setupView() {
@@ -79,20 +78,4 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
-        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(500)
-
-        AnimatorSet().apply {
-            playSequentially(name, message, logout)
-            startDelay = 500
-        }.start()
-    }
 }

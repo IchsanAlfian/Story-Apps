@@ -28,7 +28,7 @@
             android:name=".ui.story.StoryActivity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".ui.addStory.welcome.WelcomeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.register.RegisterActivity"

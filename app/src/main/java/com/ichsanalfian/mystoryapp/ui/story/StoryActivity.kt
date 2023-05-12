@@ -1,25 +1,18 @@
 package com.ichsanalfian.mystoryapp.ui.story
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ichsanalfian.mystoryapp.R
-import com.ichsanalfian.mystoryapp.WelcomeActivity
-import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
-import com.ichsanalfian.mystoryapp.databinding.ActivityRegisterBinding
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryActivity
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
-import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
 class StoryActivity : AppCompatActivity() {

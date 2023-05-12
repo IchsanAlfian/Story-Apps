@@ -15,14 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import com.ichsanalfian.mystoryapp.R
-import com.ichsanalfian.mystoryapp.WelcomeActivity
-import com.ichsanalfian.mystoryapp.ui.main.MainActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityLoginBinding
 import com.ichsanalfian.mystoryapp.model.UserModel
-import com.ichsanalfian.mystoryapp.model.UserPreference
-import com.ichsanalfian.mystoryapp.ui.register.RegisterActivity
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
