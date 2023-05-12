@@ -26,6 +26,8 @@ import com.ichsanalfian.mystoryapp.ui.register.RegisterActivity
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
+
+
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class LoginActivity : AppCompatActivity() {
@@ -170,9 +172,9 @@ class LoginActivity : AppCompatActivity() {
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
-        val message =
-            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
+//        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
+//       val message =
+//           ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
         val emailTextView =
             ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
         val emailEditTextLayout =
@@ -185,8 +187,7 @@ class LoginActivity : AppCompatActivity() {
 
         AnimatorSet().apply {
             playSequentially(
-                title,
-                message,
+
                 emailTextView,
                 emailEditTextLayout,
                 passwordTextView,
