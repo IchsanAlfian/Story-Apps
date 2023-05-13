@@ -45,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        loginViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         binding.loginButton.setOnClickListener {
             loginViewModel.loginRequest(
                 binding.edLoginEmail.text.toString(),
@@ -112,6 +115,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun saveUser(uModel: UserModel) {
         loginViewModel.saveUser(uModel)
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.loginProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 

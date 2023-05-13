@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: StoryRepository) : ViewModel() {
     val login: LiveData<LoginResponse> = repository.login
+    val isLoading: LiveData<Boolean> = repository.isLoading
     fun loginRequest(email: String, password: String) {
         viewModelScope.launch {
             repository.loginRequest(email, password)

@@ -12,6 +12,7 @@ import okhttp3.RequestBody
 
 
 class AddStoryViewModel(private val repository: StoryRepository) : ViewModel() {
+    val isLoading: LiveData<Boolean> = repository.isLoading
     val upload: LiveData<AddStoryResponse> = repository.upload
     fun uploadStoryRequest(image: MultipartBody.Part, desc: RequestBody, token: String) {
         viewModelScope.launch {

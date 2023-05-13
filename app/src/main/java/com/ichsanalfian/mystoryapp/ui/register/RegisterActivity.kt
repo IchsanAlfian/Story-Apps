@@ -44,6 +44,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        registerViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         binding.registerButton.setOnClickListener {
             registerViewModel.postRegister(
                 binding.edRegisterName.text.toString(),
@@ -104,6 +107,9 @@ class RegisterActivity : AppCompatActivity() {
             )
             startDelay = 500
         }.start()
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.registerProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }

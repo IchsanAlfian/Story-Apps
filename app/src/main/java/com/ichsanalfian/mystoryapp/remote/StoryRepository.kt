@@ -34,6 +34,9 @@ class StoryRepository private constructor(
     private val _upload = MutableLiveData<AddStoryResponse>()
     val upload: LiveData<AddStoryResponse> = _upload
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     suspend fun userLogout() {
         userPref.isUserLogin(false)
     }
@@ -43,23 +46,23 @@ class StoryRepository private constructor(
     }
 
     fun registerRequest(name: String, email: String, password: String) {
+        _isLoading.value = true
         val client = apiService.registerRequest(name, email, password)
         client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
             ) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
                     _register.value = response.body()
-//
                 } else {
                     Log.e("StoryRepositoryRegister", "onFailure: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-//                _isLoading.value = false
-
+                _isLoading.value = false
                 Log.e("StoryRepositoryRegister", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }
@@ -67,13 +70,14 @@ class StoryRepository private constructor(
     }
 
     fun loginRequest(email: String, password: String) {
+        _isLoading.value = true
         val client = apiService.loginRequest(email, password)
-
         client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
                 call: Call<LoginResponse>,
                 response: Response<LoginResponse>
             ) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
                     _login.value = response.body()
                 } else {
@@ -82,7 +86,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-//                _isLoading.value = false
+                _isLoading.value = false
                 Log.e("StoryRepositoryLogin", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }
@@ -90,12 +94,14 @@ class StoryRepository private constructor(
     }
 
     fun uploadStoryRequest(image: MultipartBody.Part, desc: RequestBody, token: String) {
+        _isLoading.value = true
         val client = apiService.addStory(image, desc, token)
         client.enqueue(object : Callback<AddStoryResponse> {
             override fun onResponse(
                 call: Call<AddStoryResponse>,
                 response: Response<AddStoryResponse>
             ) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
                     _upload.value = response.body()
                 } else {
@@ -104,7 +110,7 @@ class StoryRepository private constructor(
             }
 
             override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
-//                _isLoading.value = false
+                _isLoading.value = false
                 Log.e("StoryRepositoryUpload", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }
@@ -112,12 +118,14 @@ class StoryRepository private constructor(
     }
 
     fun getAllStory(token: String) {
+        _isLoading.value = true
         val client = apiService.getAllStory(token)
         client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
                 call: Call<StoryResponse>,
                 response: Response<StoryResponse>
             ) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
                     _story.value = response.body()
                 } else {
@@ -125,7 +133,7 @@ class StoryRepository private constructor(
                 }
             }
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-//                _isLoading.value = false
+                _isLoading.value = false
                 Log.e("StoryRepositoryStory", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }

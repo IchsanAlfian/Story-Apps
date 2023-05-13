@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -74,6 +75,9 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupViewModelAndAdapter() {
         factory = ViewModelFactory.getInstance(this)
+        storyViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         storyViewModel.getUser().observe(this@StoryActivity) { data ->
             if (data.isLogin) {
                 storyViewModel.getAllStory(data.token)
@@ -89,5 +93,8 @@ class StoryActivity : AppCompatActivity() {
                 binding.rvStory.adapter = StoryAdapter(it.listStory)
             }
         }
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.storyProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

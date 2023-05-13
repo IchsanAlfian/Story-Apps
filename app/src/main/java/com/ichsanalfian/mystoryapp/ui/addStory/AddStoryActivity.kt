@@ -13,6 +13,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -139,6 +140,9 @@ class AddStoryActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
     private fun uploadStory() {
+        addStoryViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         addStoryViewModel.getUser().observe(this){ data ->
             if (getFile != null) {
                 val file = reduceFileImage(getFile as File)
@@ -161,7 +165,11 @@ class AddStoryActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
             }
+
         }
+    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.addStoryProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }

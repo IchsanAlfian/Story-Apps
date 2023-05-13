@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val repository: StoryRepository) : ViewModel() {
     val register: LiveData<RegisterResponse> = repository.register
+    val isLoading: LiveData<Boolean> = repository.isLoading
     fun postRegister(name: String, email: String, password: String) {
         viewModelScope.launch {
             repository.registerRequest(name, email, password)
