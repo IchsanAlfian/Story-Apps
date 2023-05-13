@@ -15,7 +15,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.ichsanalfian.mystoryapp.ui.addStory.welcome.WelcomeActivity
+import com.ichsanalfian.mystoryapp.ui.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 //        })
 //        factory = ViewModelFactory.getInstance(this)
         startActivity(Intent(this, WelcomeActivity::class.java))
-//                finish()
+        finish()
     }
 
     private fun setupAction() {

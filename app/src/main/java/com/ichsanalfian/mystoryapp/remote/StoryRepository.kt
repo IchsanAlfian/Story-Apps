@@ -50,12 +50,14 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             ) {
                 if (response.isSuccessful) {
                     _register.value = response.body()
+//
                 } else {
                     Log.e("StoryRepositoryRegister", "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
 //                _isLoading.value = false
+
                 Log.e("StoryRepositoryRegister", "onFailure: ${t.message.toString()}")
                 t.printStackTrace()
             }

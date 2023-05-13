@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
@@ -64,40 +65,24 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.registerButton.setOnClickListener {
-            val name = binding.edRegisterName.text.toString()
-            val email = binding.edRegisterEmail.text.toString()
-            val password = binding.edRegisterPassword.text.toString()
-            when {
-                name.isEmpty() -> {
-                    binding.nameEditTextLayout.error = "Masukkan email"
-                }
-                email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = "Masukkan email"
-                }
-                password.isEmpty() -> {
-                    binding.passwordEditTextLayout.error = "Masukkan password"
-                }
-                else -> {
-//                    postText()
-                    //posttext
-                    registerViewModel.postRegister(
-                        binding.edRegisterName.text.toString(),
-                        binding.edRegisterEmail.text.toString(),
-                        binding.edRegisterPassword.text.toString()
-                    )
+            registerViewModel.postRegister(
+                binding.edRegisterName.text.toString(),
+                binding.edRegisterEmail.text.toString(),
+                binding.edRegisterPassword.text.toString()
+            )
 //                    moveActivity()
-                    //moveactivity
-                    registerViewModel.register.observe(this@RegisterActivity) {
-                        if (!it.error) {
-                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                            finish()
-                        }
-                    }
+            //moveactivity
+
 //                    registerViewModel.saveUser(UserModel(name, email, password, false))
+            registerViewModel.register.observe(this@RegisterActivity) {
+                if (it.error) {
+                    Toast.makeText(this, it.error.toString(), Toast.LENGTH_SHORT).show()
+                }else{
                     AlertDialog.Builder(this).apply {
                         setTitle("Yeah!")
-                        setMessage("Akunnya sudah jadi nih. Yuk, login dan belajar coding.")
+                        setMessage("Akunnya sudah jadi nih. Yuk, login dan bagikan ceritamu.")
                         setPositiveButton("Lanjut") { _, _ ->
+                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                             finish()
                         }
                         create()
@@ -105,6 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             }
+
         }
     }
 

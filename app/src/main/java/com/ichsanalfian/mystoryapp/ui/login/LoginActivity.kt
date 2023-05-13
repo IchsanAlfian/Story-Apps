@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
@@ -34,9 +35,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupView()
-        setupViewModel()
+        factory = ViewModelFactory.getInstance(this)
         setupAction()
         playAnimation()
     }
@@ -54,71 +54,45 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun setupViewModel() {
-//        loginViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(UserPreference.getInstance(dataStore))
-//        )[LoginViewModel::class.java]
-//
-//        loginViewModel.getUser().observe(this, { user ->
-//            this.user = user
-//        })
-        factory = ViewModelFactory.getInstance(this)
-    }
+//    private fun setupViewModel() {
+//        factory = ViewModelFactory.getInstance(this)
+//    }
 
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
-            val email = binding.edLoginEmail.text.toString()
-            val password = binding.edLoginPassword.text.toString()
-            when {
-                email.isEmpty() -> {
-                    binding.emailEditTextLayout.error = "Masukkan email"
-                }
-//                password.isEmpty() -> {
-//                    binding.passwordEditTextLayout.error = "Masukkan password"
-//                }
-//                email != user.email -> {
-//                    binding.emailEditTextLayout.error = "Email tidak sesuai"
-//                }
-//                password != user.password -> {
-//                    binding.passwordEditTextLayout.error = "Password tidak sesuai"
-//                }
-                else -> {
-//                    inputLogin()
-                    //input login
-                    loginViewModel.loginRequest(
-                        binding.edLoginEmail.text.toString(),
-                        binding.edLoginPassword.text.toString()
+            loginViewModel.loginRequest(
+                binding.edLoginEmail.text.toString(),
+                binding.edLoginPassword.text.toString()
+            )
+            loginViewModel.login.observe(this@LoginActivity) {
+                saveUser(
+                    UserModel(
+                        it.loginResult?.name.toString(),
+                        true,
+                        "Bearer " + (it.loginResult?.token.toString())
                     )
-                    loginViewModel.login.observe(this@LoginActivity) {
-                        saveUser(
-                            UserModel(
-                                it.loginResult?.name.toString(),
-                                true,
-                                "Bearer " + (it.loginResult?.token.toString())
-                            )
-                        )
-                    }
-                    loginViewModel.userLogin()
+                )
+            }
+            loginViewModel.userLogin()
+            loginViewModel.login.observe(this@LoginActivity) {login ->
+                if(login.error){
+                    Toast.makeText(this, login.error.toString(), Toast.LENGTH_SHORT).show()
+                }
+                else {
                     AlertDialog.Builder(this).apply {
                         setTitle("Yeah!")
-                        setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                        setMessage("Anda berhasil login. Mari bagikan momen indah anda")
                         setPositiveButton("Lanjut") { _, _ ->
-//                            val intent = Intent(context, StoryActivity::class.java)
                             intent.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                            startActivity(intent)
-//                            finish()
+                            startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
+                            finish()
+
                         }
                         create()
                         show()
                     }
-                    loginViewModel.login.observe(this@LoginActivity) {
-                        if (!it.error) {
-                            startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
-                            finish()
-                        }
-                    }
+
                 }
             }
         }

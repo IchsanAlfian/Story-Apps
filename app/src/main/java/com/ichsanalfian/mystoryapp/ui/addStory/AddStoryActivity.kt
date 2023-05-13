@@ -155,6 +155,7 @@ class AddStoryActivity : AppCompatActivity() {
                 addStoryViewModel.upload.observe(this){response ->
                     if (!response.error){
                         startActivity(Intent(this@AddStoryActivity, StoryActivity::class.java))
+                        finish()
                     }else{
                         Toast.makeText(this, response.error.toString(), Toast.LENGTH_SHORT).show()
                     }
