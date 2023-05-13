@@ -15,12 +15,10 @@ import com.ichsanalfian.mystoryapp.ui.register.RegisterActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupView()
         setupAction()
         playAnimation()
@@ -44,7 +42,6 @@ class WelcomeActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
-
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
@@ -57,18 +54,14 @@ class WelcomeActivity : AppCompatActivity() {
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
-
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(500)
         val signup = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(500)
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
-//        val desc = ObjectAnimator.ofFloat(binding.descTextView, View.ALPHA, 1f).setDuration(500)
-
         val together = AnimatorSet().apply {
             playTogether(login, signup)
         }
-
         AnimatorSet().apply {
-            playSequentially(title,  together)
+            playSequentially(title, together)
             start()
         }
     }

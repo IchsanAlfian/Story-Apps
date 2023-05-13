@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.ichsanalfian.mystoryapp.R
 
-class EditTextPassword: AppCompatEditText,View.OnTouchListener {
+class EditTextPassword : AppCompatEditText, View.OnTouchListener {
     private lateinit var clearButtonImage: Drawable
 
     constructor(context: Context) : super(context) {
@@ -25,32 +25,27 @@ class EditTextPassword: AppCompatEditText,View.OnTouchListener {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Menambahkan hint pada editText
         hint = "Masukkan Password"
-
-        // Menambahkan text aligmnet pada editText
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
     }
 
     private fun init() {
         inputType = EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
         transformationMethod = PasswordTransformationMethod()
-        // Menginisialisasi gambar clear button
         clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
-
-        // Menambahkan aksi kepada clear button
         setOnTouchListener(this)
-
-        // Menambahkan aksi ketika ada perubahan text akan memunculkan clear button
         addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // Do nothing.
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -59,36 +54,37 @@ class EditTextPassword: AppCompatEditText,View.OnTouchListener {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.toString().length < 8) error = "Password must minimum 8"
-
             }
         })
     }
 
-    // Menampilkan clear button
     private fun showClearButton() {
         setButtonDrawables(endOfTheText = clearButtonImage)
     }
 
-    // Menghilangkan clear button
     private fun hideClearButton() {
         setButtonDrawables()
     }
 
-    //Mengkonfigurasi button
-    private fun setButtonDrawables(startOfTheText: Drawable? = null, topOfTheText:Drawable? = null, endOfTheText:Drawable? = null, bottomOfTheText: Drawable? = null){
-        // Sets the Drawables (if any) to appear to the left of,
-        // above, to the right of, and below the text.
-        setCompoundDrawablesWithIntrinsicBounds(startOfTheText, topOfTheText, endOfTheText, bottomOfTheText)
+    private fun setButtonDrawables(
+        startOfTheText: Drawable? = null,
+        topOfTheText: Drawable? = null,
+        endOfTheText: Drawable? = null,
+        bottomOfTheText: Drawable? = null
+    ) {
+        setCompoundDrawablesWithIntrinsicBounds(
+            startOfTheText,
+            topOfTheText,
+            endOfTheText,
+            bottomOfTheText
+        )
     }
-
-
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
         if (compoundDrawables[2] != null) {
             val clearButtonStart: Float
             val clearButtonEnd: Float
             var isClearButtonClicked = false
-
             if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
                 clearButtonEnd = (clearButtonImage.intrinsicWidth + paddingStart).toFloat()
                 when {
@@ -103,12 +99,14 @@ class EditTextPassword: AppCompatEditText,View.OnTouchListener {
             if (isClearButtonClicked) {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
+                        clearButtonImage =
+                            ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
                         showClearButton()
                         return true
                     }
                     MotionEvent.ACTION_UP -> {
-                        clearButtonImage = ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
+                        clearButtonImage =
+                            ContextCompat.getDrawable(context, R.drawable.ic_close) as Drawable
                         when {
                             text != null -> text?.clear()
                         }

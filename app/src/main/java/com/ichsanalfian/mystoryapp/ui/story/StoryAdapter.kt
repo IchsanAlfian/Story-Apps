@@ -1,7 +1,6 @@
 package com.ichsanalfian.mystoryapp.ui.story
 
 import android.content.Intent
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,6 @@ import com.ichsanalfian.mystoryapp.databinding.ItemStoryBinding
 import com.ichsanalfian.mystoryapp.response.ListStoryItem
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_DESC
-
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_NAME
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_PHOTO
 
@@ -21,9 +19,6 @@ class StoryAdapter(private val listStory: List<ListStoryItem>) :
     }
 
     private var onItemClickCallback: OnItemClickCallback? = null
-//    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-//        this.onItemClickCallback = onItemClickCallback
-//    }
 
     inner class ViewHolder(private val binding: ItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {

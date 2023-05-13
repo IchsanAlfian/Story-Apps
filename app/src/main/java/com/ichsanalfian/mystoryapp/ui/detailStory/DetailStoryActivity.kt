@@ -19,6 +19,7 @@ class DetailStoryActivity : AppCompatActivity() {
             .into(binding.ivDetailPhoto)
 
     }
+
     companion object {
         const val EXTRA_NAME = "extra_name"
         const val EXTRA_PHOTO = "extra_photo"

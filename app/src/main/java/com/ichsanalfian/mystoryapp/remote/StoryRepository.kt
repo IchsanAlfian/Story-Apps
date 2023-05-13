@@ -1,7 +1,7 @@
 package com.ichsanalfian.mystoryapp.remote
 
 import android.util.Log
-import android.widget.Toast
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
@@ -17,33 +17,34 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-class StoryRepository private constructor(private val userPref: UserPreference, private val apiService: ApiService) {
+
+class StoryRepository private constructor(
+    private val userPref: UserPreference,
+    private val apiService: ApiService
+) {
     private val _register = MutableLiveData<RegisterResponse>()
-    val register : LiveData<RegisterResponse> = _register
+    val register: LiveData<RegisterResponse> = _register
 
     private val _login = MutableLiveData<LoginResponse>()
-    val login : LiveData<LoginResponse> = _login
+    val login: LiveData<LoginResponse> = _login
 
     private val _story = MutableLiveData<StoryResponse>()
-    val story : LiveData<StoryResponse> = _story
+    val story: LiveData<StoryResponse> = _story
 
-    private val _upload= MutableLiveData<AddStoryResponse>()
-    val upload : LiveData<AddStoryResponse> = _upload
+    private val _upload = MutableLiveData<AddStoryResponse>()
+    val upload: LiveData<AddStoryResponse> = _upload
 
     suspend fun userLogout() {
-//        userPref.isUserLogin(false)
         userPref.isUserLogin(false)
     }
+
     suspend fun userLogin() {
-//        userPref.isUserLogin(true)
         userPref.isUserLogin(true)
     }
 
-    fun registerRequest(name : String, email: String, password: String){
+    fun registerRequest(name: String, email: String, password: String) {
         val client = apiService.registerRequest(name, email, password)
-
-        client.enqueue(object : Callback<RegisterResponse>
-        {
+        client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
@@ -55,6 +56,7 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
                     Log.e("StoryRepositoryRegister", "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
 //                _isLoading.value = false
 
@@ -63,11 +65,11 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             }
         })
     }
-    fun loginRequest(email: String, password: String){
+
+    fun loginRequest(email: String, password: String) {
         val client = apiService.loginRequest(email, password)
 
-        client.enqueue(object : Callback<LoginResponse>
-        {
+        client.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
                 call: Call<LoginResponse>,
                 response: Response<LoginResponse>
@@ -78,6 +80,7 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
                     Log.e("StoryRepositoryLogin", "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
 //                _isLoading.value = false
                 Log.e("StoryRepositoryLogin", "onFailure: ${t.message.toString()}")
@@ -85,10 +88,10 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             }
         })
     }
-    fun uploadStoryRequest(image : MultipartBody.Part, desc :RequestBody,token : String){
-        val client = apiService.addStory(image,desc,token)
-        client.enqueue(object : Callback<AddStoryResponse>
-        {
+
+    fun uploadStoryRequest(image: MultipartBody.Part, desc: RequestBody, token: String) {
+        val client = apiService.addStory(image, desc, token)
+        client.enqueue(object : Callback<AddStoryResponse> {
             override fun onResponse(
                 call: Call<AddStoryResponse>,
                 response: Response<AddStoryResponse>
@@ -99,6 +102,7 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
                     Log.e("StoryRepositoryLogin", "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<AddStoryResponse>, t: Throwable) {
 //                _isLoading.value = false
                 Log.e("StoryRepositoryUpload", "onFailure: ${t.message.toString()}")
@@ -106,11 +110,10 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             }
         })
     }
-    fun getAllStory(token : String){
-        val client = apiService.getAllStory(token)
 
-        client.enqueue(object : Callback<StoryResponse>
-        {
+    fun getAllStory(token: String) {
+        val client = apiService.getAllStory(token)
+        client.enqueue(object : Callback<StoryResponse> {
             override fun onResponse(
                 call: Call<StoryResponse>,
                 response: Response<StoryResponse>
@@ -128,14 +131,16 @@ class StoryRepository private constructor(private val userPref: UserPreference, 
             }
         })
     }
+
     suspend fun saveUser(uModel: UserModel) {
         userPref.saveUser(uModel)
     }
+
     fun getUser(): LiveData<UserModel> {
         return userPref.getUser().asLiveData()
     }
+
     companion object {
-        private const val TAG = "StoryRepository"
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(

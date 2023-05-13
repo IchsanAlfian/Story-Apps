@@ -6,18 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.ichsanalfian.mystoryapp.remote.StoryRepository
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryViewModel
 import com.ichsanalfian.mystoryapp.ui.login.LoginViewModel
-import com.ichsanalfian.mystoryapp.ui.main.MainViewModel
 import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
 import com.ichsanalfian.mystoryapp.ui.story.StoryViewModel
 
-class ViewModelFactory(private val repository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
-
+class ViewModelFactory(private val repository: StoryRepository) :
+    ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(repository) as T
-            }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
             }
@@ -33,6 +29,7 @@ class ViewModelFactory(private val repository: StoryRepository) : ViewModelProvi
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
+
     companion object {
         @Volatile
         private var instance: ViewModelFactory? = null

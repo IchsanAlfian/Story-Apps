@@ -20,45 +20,31 @@ import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var factory: ViewModelFactory
-    private var backPressTime = 0L
     private val storyViewModel: StoryViewModel by viewModels { factory }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
         setupViewModelAndAdapter()
-//        setupAdapter()
-//        setupAction()
+
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_story, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     private fun setupView() {
-//        @Suppress("DEPRECATION")
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            window.insetsController?.hide(WindowInsets.Type.statusBars())
-//        } else {
-//            window.setFlags(
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN
-//            )
-//        }
-//        supportActionBar?.hide()
         supportActionBar?.title = "My Story App"
-
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //edit coba coba
         val layoutManager = LinearLayoutManager(this)
-
         binding.rvStory.layoutManager = layoutManager
         binding.rvStory.setHasFixedSize(true)
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
 
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.button_add -> {
@@ -67,7 +53,7 @@ class StoryActivity : AppCompatActivity() {
                 finish()
                 true
             }
-            R.id.action_logout-> {
+            R.id.action_logout -> {
                 storyViewModel.userLogout()
                 Toast.makeText(this, "Anda telah Logout", Toast.LENGTH_SHORT).show()
                 true
@@ -76,6 +62,7 @@ class StoryActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         AlertDialog.Builder(this)
             .setMessage("Are you sure you want to exit?")
@@ -84,6 +71,7 @@ class StoryActivity : AppCompatActivity() {
             .setNegativeButton("No", null)
             .show()
     }
+
     private fun setupViewModelAndAdapter() {
         factory = ViewModelFactory.getInstance(this)
         storyViewModel.getUser().observe(this@StoryActivity) { data ->
@@ -95,25 +83,11 @@ class StoryActivity : AppCompatActivity() {
             }
         }
         storyViewModel.story.observe(this@StoryActivity) {
-            //edit ifnya nanti
-            binding.rvStory.adapter = StoryAdapter(it.listStory)
-//            if (it != null) {
-//                binding.rvStory.adapter = StoryAdapter(it.listStory)
-//            }
-
+            if (it == null) {
+                Toast.makeText(this, "Data Kosong", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.rvStory.adapter = StoryAdapter(it.listStory)
+            }
         }
-
     }
-
-
-//    private fun setupAdapter() {
-//        storyViewModel.story.observe(this@StoryActivity) {
-//            //edit ifnya nanti
-//            binding.rvStory.adapter = StoryAdapter(it.listStory)
-////            if (it != null) {
-////                binding.rvStory.adapter = StoryAdapter(it.listStory)
-////            }
-//
-//        }
-//    }
 }

@@ -13,13 +13,15 @@ interface ApiService {
     @GET("stories")
     fun getAllStory(
         @Header("Authorization") token: String
-    ):Call<StoryResponse>
+    ): Call<StoryResponse>
+
     @FormUrlEncoded
     @POST("login")
     fun loginRequest(
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<LoginResponse>
+
     @FormUrlEncoded
     @POST("register")
     fun registerRequest(
@@ -27,6 +29,7 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<RegisterResponse>
+
     @Multipart
     @POST("stories")
     fun addStory(

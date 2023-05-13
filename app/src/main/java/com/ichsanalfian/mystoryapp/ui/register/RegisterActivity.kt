@@ -2,7 +2,6 @@ package com.ichsanalfian.mystoryapp.ui.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,31 +12,20 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityRegisterBinding
-import com.ichsanalfian.mystoryapp.model.UserModel
-import com.ichsanalfian.mystoryapp.model.UserPreference
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var factory: ViewModelFactory
-
     private val registerViewModel: RegisterViewModel by viewModels { factory }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupView()
-        setupViewModel()
+        factory = ViewModelFactory.getInstance(this)
         setupAction()
         playAnimation()
     }
@@ -55,14 +43,6 @@ class RegisterActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun setupViewModel() {
-//        registerViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(UserPreference.getInstance(dataStore))
-//        )[RegisterViewModel::class.java]
-        factory = ViewModelFactory.getInstance(this)
-    }
-
     private fun setupAction() {
         binding.registerButton.setOnClickListener {
             registerViewModel.postRegister(
@@ -70,14 +50,10 @@ class RegisterActivity : AppCompatActivity() {
                 binding.edRegisterEmail.text.toString(),
                 binding.edRegisterPassword.text.toString()
             )
-//                    moveActivity()
-            //moveactivity
-
-//                    registerViewModel.saveUser(UserModel(name, email, password, false))
             registerViewModel.register.observe(this@RegisterActivity) {
                 if (it.error) {
                     Toast.makeText(this, it.error.toString(), Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     AlertDialog.Builder(this).apply {
                         setTitle("Yeah!")
                         setMessage("Akunnya sudah jadi nih. Yuk, login dan bagikan ceritamu.")
@@ -100,17 +76,21 @@ class RegisterActivity : AppCompatActivity() {
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
-
         val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
-        val nameTextView = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
-        val nameEditTextLayout = ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(500)
-        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
-        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(500)
-        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
-        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(500)
-        val register = ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(500)
-
-
+        val nameTextView =
+            ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
+        val nameEditTextLayout =
+            ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val emailTextView =
+            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
+        val emailEditTextLayout =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val passwordTextView =
+            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
+        val passwordEditTextLayout =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val register =
+            ObjectAnimator.ofFloat(binding.registerButton, View.ALPHA, 1f).setDuration(500)
         AnimatorSet().apply {
             playSequentially(
                 title,

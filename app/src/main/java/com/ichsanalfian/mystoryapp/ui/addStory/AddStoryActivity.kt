@@ -1,10 +1,12 @@
+@file:Suppress("DEPRECATION")
+
 package com.ichsanalfian.mystoryapp.ui.addStory
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.hardware.Camera
 import android.net.Uri
@@ -17,12 +19,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
-import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityAddStoryBinding
-import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
 import com.ichsanalfian.mystoryapp.utils.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -107,6 +104,7 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
     }
+    @SuppressLint("QueryPermissionsNeeded")
     private fun startTakePhoto() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.resolveActivity(packageManager)
@@ -164,9 +162,6 @@ class AddStoryActivity : AppCompatActivity() {
                 Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-//    private fun reduceFileImage(file: File): File {
-//        return file
-//    }
+
 }
