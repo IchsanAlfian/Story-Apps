@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityRegisterBinding
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
@@ -58,9 +59,9 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this, it.error.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     AlertDialog.Builder(this).apply {
-                        setTitle("Yeah!")
-                        setMessage("Akunnya sudah jadi nih. Yuk, login dan bagikan ceritamu.")
-                        setPositiveButton("Lanjut") { _, _ ->
+                        setTitle("Yosh!")
+                        setMessage(getString(R.string.msg_regist))
+                        setPositiveButton(getString(R.string.msg_next)) { _, _ ->
                             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                             finish()
                         }
@@ -75,7 +76,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
+            duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()

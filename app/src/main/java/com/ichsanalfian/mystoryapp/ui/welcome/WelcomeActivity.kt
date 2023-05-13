@@ -11,6 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.ichsanalfian.mystoryapp.databinding.ActivityWelcomeBinding
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
+import com.ichsanalfian.mystoryapp.ui.main.MainActivity
 import com.ichsanalfian.mystoryapp.ui.register.RegisterActivity
 
 class WelcomeActivity : AppCompatActivity() {
@@ -50,7 +51,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
+            duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()

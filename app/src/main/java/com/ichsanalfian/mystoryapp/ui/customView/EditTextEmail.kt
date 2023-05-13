@@ -35,7 +35,7 @@ class EditTextEmail : AppCompatEditText, View.OnTouchListener {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        hint = "Masukan email"
+        hint = context.getString(R.string.msg_hintEmail)
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
     }
 
@@ -53,7 +53,7 @@ class EditTextEmail : AppCompatEditText, View.OnTouchListener {
 
             override fun afterTextChanged(s: Editable) {
                 if (!Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()) error =
-                    "Email tidak valid"
+                    context.getString(R.string.msg_errorEmail)
 
             }
         })

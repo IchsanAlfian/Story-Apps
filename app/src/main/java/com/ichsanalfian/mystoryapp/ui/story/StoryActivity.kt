@@ -3,6 +3,7 @@ package com.ichsanalfian.mystoryapp.ui.story
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -35,7 +36,6 @@ class StoryActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        supportActionBar?.title = "My Story App"
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val layoutManager = LinearLayoutManager(this)
@@ -54,9 +54,14 @@ class StoryActivity : AppCompatActivity() {
                 finish()
                 true
             }
+            R.id.button_setting -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                true
+            }
+
             R.id.action_logout -> {
                 storyViewModel.userLogout()
-                Toast.makeText(this, "Anda telah Logout", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msg_logout), Toast.LENGTH_SHORT).show()
                 true
             }
             else -> true
@@ -66,10 +71,10 @@ class StoryActivity : AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         AlertDialog.Builder(this)
-            .setMessage("Are you sure you want to exit?")
+            .setMessage(getString(R.string.msg_exit))
             .setCancelable(false)
-            .setPositiveButton("Yes") { _, _ -> super.onBackPressed() }
-            .setNegativeButton("No", null)
+            .setPositiveButton(getString(R.string.msg_yes)) { _, _ -> super.onBackPressed() }
+            .setNegativeButton(getString(R.string.msg_no), null)
             .show()
     }
 
@@ -88,7 +93,7 @@ class StoryActivity : AppCompatActivity() {
         }
         storyViewModel.story.observe(this@StoryActivity) {
             if (it == null) {
-                Toast.makeText(this, "Data Kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.mgs_dataNull), Toast.LENGTH_SHORT).show()
             } else {
                 binding.rvStory.adapter = StoryAdapter(it.listStory)
             }

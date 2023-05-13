@@ -20,6 +20,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityAddStoryBinding
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
 import com.ichsanalfian.mystoryapp.utils.*
@@ -58,7 +59,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        supportActionBar?.title = "Unggah Ceritamu"
+        supportActionBar?.title = getString(R.string.msg_titleUp)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
@@ -75,7 +76,7 @@ class AddStoryActivity : AppCompatActivity() {
             if (!allPermissionsGranted()) {
                 Toast.makeText(
                     this,
-                    "Tidak mendapatkan permission.",
+                    getString(R.string.msg_deniedPerm),
                     Toast.LENGTH_SHORT
                 ).show()
                 finish()
@@ -97,7 +98,6 @@ class AddStoryActivity : AppCompatActivity() {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
             myFile.let { file ->
-          //Silakan gunakan kode ini jika mengalami perubahan rotasi
                 val isBackCamera = Camera.CameraInfo.CAMERA_FACING_BACK == 0
           rotateFile(file, isBackCamera)
                 getFile = file
@@ -136,7 +136,7 @@ class AddStoryActivity : AppCompatActivity() {
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT
         intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Silahkan Pilih Gambar")
+        val chooser = Intent.createChooser(intent, getString(R.string.msg_choosePict))
         launcherIntentGallery.launch(chooser)
     }
     private fun uploadStory() {
@@ -163,7 +163,7 @@ class AddStoryActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AddStoryActivity, getString(R.string.msg_inputPhoto), Toast.LENGTH_SHORT).show()
             }
 
         }

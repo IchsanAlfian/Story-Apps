@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityLoginBinding
 import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
@@ -68,9 +69,9 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, login.error.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     AlertDialog.Builder(this).apply {
-                        setTitle("Yeah!")
-                        setMessage("Anda berhasil login. Mari bagikan momen indah anda")
-                        setPositiveButton("Lanjut") { _, _ ->
+                        setTitle("Yosh!")
+                        setMessage(getString(R.string.msg_login))
+                        setPositiveButton(R.string.msg_next) { _, _ ->
                             intent.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(Intent(this@LoginActivity, StoryActivity::class.java))
@@ -86,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
+            duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()

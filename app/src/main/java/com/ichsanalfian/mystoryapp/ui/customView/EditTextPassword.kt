@@ -35,7 +35,7 @@ class EditTextPassword : AppCompatEditText, View.OnTouchListener {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        hint = "Masukkan Password"
+        hint = context.getString(R.string.msg_hintPw)
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
     }
 
@@ -53,7 +53,7 @@ class EditTextPassword : AppCompatEditText, View.OnTouchListener {
             }
 
             override fun afterTextChanged(s: Editable) {
-                if (s.toString().length < 8) error = "Password must minimum 8"
+                if (s.toString().length < 8) error = context.getString(R.string.msg_errorPw)
             }
         })
     }

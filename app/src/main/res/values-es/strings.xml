@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mi Aplicación de Historias</string>
+    <string name="signup">Registrarse</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="message_welcome_page">¡Comparte momentos interesantes y descubre diversas historias emocionantes de tus amigos en Dicoding!</string>
+    <string name="title_welcome_page">¡Hola, bienvenido a Mi Aplicación de Historias!</string>
+    <string name="title_signup_page">¡Por favor complete su información personal!</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="message_login_page">Por favor ingrese sus datos</string>
+    <string name="title_login_page">¿Estás listo para compartir tus emocionantes historias?</string>
+    <string name="name">Nombre</string>
+    <string name="greeting">Hola %1$s,</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="Add_Story">Añadir Historia</string>
+    <string name="upload">Cargar</string>
+    <string name="camera">Cámara</string>
+    <string name="gallery">Galería</string>
+    <string name="description_hint">Ingrese una descripción...</string>
+    <string name="input_nama">Ingrese Nombre</string>
+    <string name="setting_local">Ajuste local</string>
+    <string name="msg_regist">Su cuenta está lista. Inicie sesión y comparta su historia.</string>
+    <string name="msg_next">Siguiente</string>
+    <string name="msg_login">Ha iniciado sesión con éxito. Comparta sus hermosos momentos.</string>
+    <string name="msg_logout">Ha cerrado sesión</string>
+    <string name="msg_exit">¿Está seguro de que desea salir?</string>
+    <string name="msg_yes">Sí</string>
+    <string name="msg_no">No</string>
+    <string name="mgs_dataNull">Datos Vacíos</string>
+    <string name="msg_titleUp">Cargar Su Historia</string>
+    <string name="msg_deniedPerm">No se obtuvo permiso.</string>
+    <string name="msg_choosePict">Por favor seleccione una imagen</string>
+    <string name="msg_inputPhoto">Por favor ingrese primero un archivo de imagen.</string>
+    <string name="msg_hintEmail">Ingrese correo electrónico</string>
+    <string name="msg_errorEmail">Correo electrónico inválido</string>
+    <string name="msg_hintPw">Ingrese contraseña</string>
+    <string name="msg_errorPw">La longitud mínima de la contraseña es 8</string>
+</resources>
