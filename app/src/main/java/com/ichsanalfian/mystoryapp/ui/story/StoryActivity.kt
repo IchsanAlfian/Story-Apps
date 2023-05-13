@@ -51,7 +51,6 @@ class StoryActivity : AppCompatActivity() {
             R.id.button_add -> {
                 val intent = Intent(this, AddStoryActivity::class.java)
                 startActivity(intent)
-                finish()
                 true
             }
             R.id.button_setting -> {
@@ -73,7 +72,8 @@ class StoryActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setMessage(getString(R.string.msg_exit))
             .setCancelable(false)
-            .setPositiveButton(getString(R.string.msg_yes)) { _, _ -> super.onBackPressed() }
+            .setPositiveButton(getString(R.string.msg_yes)) { _, _ -> super.onBackPressed()
+                finishAffinity()  }
             .setNegativeButton(getString(R.string.msg_no), null)
             .show()
     }

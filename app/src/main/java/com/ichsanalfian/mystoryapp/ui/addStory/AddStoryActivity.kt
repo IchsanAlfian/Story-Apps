@@ -35,18 +35,19 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var currentPhotoPath: String
     private lateinit var binding: ActivityAddStoryBinding
     private var getFile: File? = null
+    private var status: Boolean = true
     private lateinit var factory: ViewModelFactory
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
         requestPermission()
         setupViewModel()
-
         binding.cameraButton.setOnClickListener { startTakePhoto() }
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.uploadButton.setOnClickListener {
@@ -54,6 +55,7 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
     }
+
     private fun setupViewModel() {
         factory = ViewModelFactory.getInstance(this)
     }
@@ -63,9 +65,11 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -83,7 +87,8 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
     }
-    private fun requestPermission(){
+
+    private fun requestPermission() {
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -92,6 +97,7 @@ class AddStoryActivity : AppCompatActivity() {
             )
         }
     }
+
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -99,12 +105,13 @@ class AddStoryActivity : AppCompatActivity() {
             val myFile = File(currentPhotoPath)
             myFile.let { file ->
                 val isBackCamera = Camera.CameraInfo.CAMERA_FACING_BACK == 0
-          rotateFile(file, isBackCamera)
+                rotateFile(file, isBackCamera)
                 getFile = file
                 binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
         }
     }
+
     @SuppressLint("QueryPermissionsNeeded")
     private fun startTakePhoto() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -120,6 +127,7 @@ class AddStoryActivity : AppCompatActivity() {
             launcherIntentCamera.launch(intent)
         }
     }
+
     private val launcherIntentGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -132,6 +140,7 @@ class AddStoryActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun startGallery() {
         val intent = Intent()
         intent.action = ACTION_GET_CONTENT
@@ -139,37 +148,53 @@ class AddStoryActivity : AppCompatActivity() {
         val chooser = Intent.createChooser(intent, getString(R.string.msg_choosePict))
         launcherIntentGallery.launch(chooser)
     }
+
     private fun uploadStory() {
         addStoryViewModel.isLoading.observe(this) {
             showLoading(it)
         }
-        addStoryViewModel.getUser().observe(this){ data ->
+        addStoryViewModel.getUser().observe(this) { data ->
             if (getFile != null) {
                 val file = reduceFileImage(getFile as File)
-                val description = binding.descriptionEditText.text.toString().toRequestBody("text/plain".toMediaType())
+                val description = binding.descriptionEditText.text.toString()
+                    .toRequestBody("text/plain".toMediaType())
                 val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
                 val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                     "photo",
                     file.name,
                     requestImageFile
                 )
-                addStoryViewModel.uploadStoryRequest(imageMultipart,description,data.token)
-                addStoryViewModel.upload.observe(this){response ->
-                    if (!response.error){
+                if (binding.descriptionEditText.text.isEmpty()) {
+                    Toast.makeText(
+                        this@AddStoryActivity,
+                        getString(R.string.msg_errorDesc),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    status = false
+                } else {
+                    status = true
+                }
+                addStoryViewModel.uploadStoryRequest(imageMultipart, description, data.token)
+                addStoryViewModel.upload.observe(this) { response ->
+                    if (!response.error && status) {
                         startActivity(Intent(this@AddStoryActivity, StoryActivity::class.java))
                         finish()
-                    }else{
+                    } else {
                         Toast.makeText(this, response.error.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {
-                Toast.makeText(this@AddStoryActivity, getString(R.string.msg_inputPhoto), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@AddStoryActivity,
+                    getString(R.string.msg_inputPhoto),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         }
     }
+
     private fun showLoading(isLoading: Boolean) {
         binding.addStoryProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
 }

@@ -1,7 +1,6 @@
 package com.ichsanalfian.mystoryapp.remote
 
 import android.util.Log
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
