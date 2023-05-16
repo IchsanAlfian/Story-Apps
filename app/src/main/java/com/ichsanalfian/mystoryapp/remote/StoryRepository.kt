@@ -104,7 +104,7 @@ class StoryRepository private constructor(
                 if (response.isSuccessful) {
                     _upload.value = response.body()
                 } else {
-                    Log.e("StoryRepositoryLogin", "onFailure: ${response.message()}")
+                    Log.e("StoryRepositoryUpload", "onFailure: ${response.message()}")
                 }
             }
 

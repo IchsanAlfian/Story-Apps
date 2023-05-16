@@ -15,13 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryActivity
-import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
+import com.ichsanalfian.mystoryapp.ui.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
 @Suppress("DEPRECATION")
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var factory: ViewModelFactory
+
     private val storyViewModel: StoryViewModel by viewModels { factory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +81,8 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupViewModelAndAdapter() {
         factory = ViewModelFactory.getInstance(this)
+
+
         storyViewModel.isLoading.observe(this) {
             showLoading(it)
         }
@@ -87,7 +90,7 @@ class StoryActivity : AppCompatActivity() {
             if (data.isLogin) {
                 storyViewModel.getAllStory(data.token)
             } else {
-                startActivity(Intent(this@StoryActivity, LoginActivity::class.java))
+                startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
                 finish()
             }
         }

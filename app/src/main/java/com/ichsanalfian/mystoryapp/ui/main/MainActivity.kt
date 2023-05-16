@@ -6,10 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import com.ichsanalfian.mystoryapp.ui.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.databinding.ActivityMainBinding
+import com.ichsanalfian.mystoryapp.ui.story.StoryActivity
+import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var factory: ViewModelFactory
+    private val mainViewModel: MainViewModel by viewModels { factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,7 +37,15 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
     private fun setupViewModel() {
-        startActivity(Intent(this, WelcomeActivity::class.java))
-        finish()
+        factory = ViewModelFactory.getInstance(this)
+        mainViewModel.getUser().observe(this@MainActivity) { data ->
+            if (data.isLogin) {
+                startActivity(Intent(this@MainActivity, StoryActivity::class.java))
+                finish()
+            } else {
+                startActivity(Intent(this@MainActivity, WelcomeActivity::class.java))
+                finish()
+            }
+        }
     }
 }
