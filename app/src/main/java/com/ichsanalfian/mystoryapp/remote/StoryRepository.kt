@@ -1,9 +1,11 @@
 package com.ichsanalfian.mystoryapp.remote
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.api.ApiService
 import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.model.UserPreference
@@ -87,6 +89,7 @@ class StoryRepository private constructor(
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e("StoryRepositoryLogin", "onFailure: ${t.message.toString()}")
+
                 t.printStackTrace()
             }
         })

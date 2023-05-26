@@ -11,7 +11,6 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.ichsanalfian.mystoryapp.databinding.ActivityWelcomeBinding
 import com.ichsanalfian.mystoryapp.ui.login.LoginActivity
-import com.ichsanalfian.mystoryapp.ui.main.MainActivity
 import com.ichsanalfian.mystoryapp.ui.register.RegisterActivity
 
 class WelcomeActivity : AppCompatActivity() {

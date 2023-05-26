@@ -38,10 +38,7 @@ class AddStoryActivity : AppCompatActivity() {
     private var status: Boolean = true
     private lateinit var factory: ViewModelFactory
 
-    companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,5 +193,9 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.addStoryProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+    companion object {
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUEST_CODE_PERMISSIONS = 10
     }
 }
