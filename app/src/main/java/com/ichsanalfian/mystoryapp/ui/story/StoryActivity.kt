@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
+import com.ichsanalfian.mystoryapp.paging.LoadingStateAdapter
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryActivity
 import com.ichsanalfian.mystoryapp.ui.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
@@ -22,12 +23,14 @@ import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var factory: ViewModelFactory
+    private lateinit var adapter: StoryAdapter
 
     private val storyViewModel: StoryViewModel by viewModels { factory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupView()
         setupViewModelAndAdapter()
+
 
     }
 
@@ -81,14 +84,15 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupViewModelAndAdapter() {
         factory = ViewModelFactory.getInstance(this)
-
-
         storyViewModel.isLoading.observe(this) {
             showLoading(it)
         }
+        adapter = StoryAdapter()
         storyViewModel.getUser().observe(this@StoryActivity) { data ->
             if (data.isLogin) {
-                storyViewModel.getAllStory(data.token)
+                storyViewModel.getAllStory.observe(this@StoryActivity){
+                    adapter.submitData(lifecycle, it)
+                }
             } else {
                 startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
                 finish()
@@ -98,9 +102,15 @@ class StoryActivity : AppCompatActivity() {
             if (it == null) {
                 Toast.makeText(this, getString(R.string.mgs_dataNull), Toast.LENGTH_SHORT).show()
             } else {
-                binding.rvStory.adapter = StoryAdapter(it.listStory)
+                binding.rvStory.layoutManager = LinearLayoutManager(this@StoryActivity)
+                binding.rvStory.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter{
+                        adapter.retry()
+                    }
+                )
             }
         }
+
     }
     private fun showLoading(isLoading: Boolean) {
         binding.storyProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

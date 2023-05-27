@@ -1,18 +1,18 @@
 package com.ichsanalfian.mystoryapp.remote
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import com.ichsanalfian.mystoryapp.R
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.ichsanalfian.mystoryapp.api.ApiService
+import com.ichsanalfian.mystoryapp.paging.StoryPagingSource
 import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.model.UserPreference
-import com.ichsanalfian.mystoryapp.response.AddStoryResponse
-import com.ichsanalfian.mystoryapp.response.LoginResponse
-import com.ichsanalfian.mystoryapp.response.RegisterResponse
-import com.ichsanalfian.mystoryapp.response.StoryResponse
+import com.ichsanalfian.mystoryapp.response.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -119,27 +119,15 @@ class StoryRepository private constructor(
         })
     }
 
-    fun getAllStory(token: String) {
-        _isLoading.value = true
-        val client = apiService.getAllStory(token)
-        client.enqueue(object : Callback<StoryResponse> {
-            override fun onResponse(
-                call: Call<StoryResponse>,
-                response: Response<StoryResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _story.value = response.body()
-                } else {
-                    Log.e("StoryRepositoryStory", "onFailure: ${response.message()}")
-                }
+    fun getAllStory():LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService, userPref)
             }
-            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e("StoryRepositoryStory", "onFailure: ${t.message.toString()}")
-                t.printStackTrace()
-            }
-        })
+        ).liveData
     }
 
     suspend fun saveUser(uModel: UserModel) {

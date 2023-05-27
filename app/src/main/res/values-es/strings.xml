@@ -37,4 +37,5 @@
     <string name="msg_hintPw">Ingrese contraseña</string>
     <string name="msg_errorPw">La longitud mínima de la contraseña es 8</string>
     <string name="msg_errorDesc">Por favor escriba alguna descripción</string>
+    <string name="retry">Inténtalo de nuevo</string>
 </resources>

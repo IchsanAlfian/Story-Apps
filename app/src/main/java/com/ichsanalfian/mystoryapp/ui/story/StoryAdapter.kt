@@ -3,6 +3,8 @@ package com.ichsanalfian.mystoryapp.ui.story
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ichsanalfian.mystoryapp.databinding.ItemStoryBinding
@@ -12,8 +14,8 @@ import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_NAME
 import com.ichsanalfian.mystoryapp.ui.detailStory.DetailStoryActivity.Companion.EXTRA_PHOTO
 
-class StoryAdapter(private val listStory: List<ListStoryItem>) :
-    RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
+class StoryAdapter :
+    PagingDataAdapter<ListStoryItem, StoryAdapter.ViewHolder>(DIFF_CALLBACK) {
     interface OnItemClickCallback {
         fun onItemClicked(data: ListStoryItem)
     }
@@ -50,9 +52,29 @@ class StoryAdapter(private val listStory: List<ListStoryItem>) :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(listStory[position])
+        val data = getItem(position)
+        if (data != null) {
+            viewHolder.bind(data)
+            viewHolder.itemView.setOnClickListener {
+                onItemClickCallback?.onItemClicked(data)
+            }
+        }
 
     }
 
-    override fun getItemCount() = listStory.size
+    //    override fun getItemCount() = listStory.size
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
+            override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+        }
+    }
 }
