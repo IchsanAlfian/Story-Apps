@@ -60,6 +60,7 @@ class StoryAdapter :
             }
         }
 
+
     }
 
     //    override fun getItemCount() = listStory.size

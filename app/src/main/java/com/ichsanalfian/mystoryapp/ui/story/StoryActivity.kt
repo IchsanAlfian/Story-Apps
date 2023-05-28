@@ -26,12 +26,15 @@ class StoryActivity : AppCompatActivity() {
     private lateinit var adapter: StoryAdapter
 
     private val storyViewModel: StoryViewModel by viewModels { factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupView()
+        binding = ActivityStoryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         setupViewModelAndAdapter()
-
-
+        setupView()
+        setTitle(adapter.itemCount.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -40,14 +43,11 @@ class StoryActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        binding = ActivityStoryBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
         binding.rvStory.setHasFixedSize(true)
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -88,10 +88,17 @@ class StoryActivity : AppCompatActivity() {
             showLoading(it)
         }
         adapter = StoryAdapter()
+        binding.rvStory.layoutManager = LinearLayoutManager(this@StoryActivity)
+        binding.rvStory.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter{
+                adapter.retry()
+            }
+        )
         storyViewModel.getUser().observe(this@StoryActivity) { data ->
             if (data.isLogin) {
-                storyViewModel.getAllStory.observe(this@StoryActivity){
+                storyViewModel.getAllStory.observe(this@StoryActivity) {
                     adapter.submitData(lifecycle, it)
+
                 }
             } else {
                 startActivity(Intent(this@StoryActivity, WelcomeActivity::class.java))
@@ -101,16 +108,8 @@ class StoryActivity : AppCompatActivity() {
         storyViewModel.story.observe(this@StoryActivity) {
             if (it == null) {
                 Toast.makeText(this, getString(R.string.mgs_dataNull), Toast.LENGTH_SHORT).show()
-            } else {
-                binding.rvStory.layoutManager = LinearLayoutManager(this@StoryActivity)
-                binding.rvStory.adapter = adapter.withLoadStateFooter(
-                    footer = LoadingStateAdapter{
-                        adapter.retry()
-                    }
-                )
             }
         }
-
     }
     private fun showLoading(isLoading: Boolean) {
         binding.storyProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
