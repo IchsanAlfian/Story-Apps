@@ -31,10 +31,8 @@ class StoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupViewModelAndAdapter()
         setupView()
-        setTitle(adapter.itemCount.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,7 +43,6 @@ class StoryActivity : AppCompatActivity() {
     private fun setupView() {
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
-        binding.rvStory.setHasFixedSize(true)
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
     }

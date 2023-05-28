@@ -55,9 +55,6 @@ class StoryAdapter :
         val data = getItem(position)
         if (data != null) {
             viewHolder.bind(data)
-            viewHolder.itemView.setOnClickListener {
-                onItemClickCallback?.onItemClicked(data)
-            }
         }
 
 
