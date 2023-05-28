@@ -7,13 +7,18 @@
         android:title="@string/Add_Story"
         app:showAsAction="always" />
     <item
+        android:id="@+id/button_location"
+        android:icon="@drawable/ic_location"
+        android:title="@string/setting_local"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/button_setting"
         android:icon="@drawable/ic_settings"
         android:title="@string/setting_local"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/logout_icon"
         android:title="@string/logout"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

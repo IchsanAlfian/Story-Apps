@@ -16,6 +16,7 @@ import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityStoryBinding
 import com.ichsanalfian.mystoryapp.paging.LoadingStateAdapter
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryActivity
+import com.ichsanalfian.mystoryapp.ui.maps.MapsActivity
 import com.ichsanalfian.mystoryapp.ui.welcome.WelcomeActivity
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
 
@@ -51,6 +52,11 @@ class StoryActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.button_add -> {
                 val intent = Intent(this, AddStoryActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.button_location -> {
+                val intent = Intent(this, MapsActivity::class.java)
                 startActivity(intent)
                 true
             }
