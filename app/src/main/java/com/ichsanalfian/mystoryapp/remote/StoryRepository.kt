@@ -130,6 +130,31 @@ class StoryRepository private constructor(
         ).liveData
     }
 
+    fun getLocationStory(token: String, location : Int) {
+        _isLoading.value = true
+        val client = apiService.getStoriesLocation(token,location)
+        client.enqueue(object : Callback<StoryResponse> {
+            override fun onResponse(
+                call: Call<StoryResponse>,
+                response: Response<StoryResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _story.value = response.body()
+                } else {
+                    Log.e("StoryRepositoryLocation", "onFailure: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("StoryRepositoryLocation", "onFailure: ${t.message.toString()}")
+
+                t.printStackTrace()
+            }
+        })
+    }
+
     suspend fun saveUser(uModel: UserModel) {
         userPref.saveUser(uModel)
     }

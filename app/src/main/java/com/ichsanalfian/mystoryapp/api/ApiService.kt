@@ -17,6 +17,11 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("size") size: Int
     ):StoryResponse
+    @GET("stories")
+    fun getStoriesLocation(
+        @Header("Authorization") token: String,
+        @Query("location") location: Int
+    ):Call<StoryResponse>
 
     @FormUrlEncoded
     @POST("login")

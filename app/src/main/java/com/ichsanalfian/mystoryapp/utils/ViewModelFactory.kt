@@ -7,6 +7,7 @@ import com.ichsanalfian.mystoryapp.remote.StoryRepository
 import com.ichsanalfian.mystoryapp.ui.addStory.AddStoryViewModel
 import com.ichsanalfian.mystoryapp.ui.login.LoginViewModel
 import com.ichsanalfian.mystoryapp.ui.main.MainViewModel
+import com.ichsanalfian.mystoryapp.ui.maps.MapsViewModel
 import com.ichsanalfian.mystoryapp.ui.register.RegisterViewModel
 import com.ichsanalfian.mystoryapp.ui.story.StoryViewModel
 
@@ -29,6 +30,9 @@ class ViewModelFactory(private val repository: StoryRepository) :
             }
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
