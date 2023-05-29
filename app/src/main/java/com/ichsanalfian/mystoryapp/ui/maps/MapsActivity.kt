@@ -5,6 +5,7 @@ import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -18,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.ichsanalfian.mystoryapp.R
 import com.ichsanalfian.mystoryapp.databinding.ActivityMapsBinding
 import com.ichsanalfian.mystoryapp.utils.ViewModelFactory
-
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -39,6 +39,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        mapsViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         mMap = googleMap
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
@@ -94,6 +97,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
     private fun setMapStyle() {
         try {
             val success =
@@ -105,6 +109,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.e(TAG, "Can't find style. Error: ", exception)
         }
     }
+    private fun showLoading(isLoading: Boolean) {
+        binding.mapsProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
     companion object {
         private const val TAG = "MapsActivity"
     }

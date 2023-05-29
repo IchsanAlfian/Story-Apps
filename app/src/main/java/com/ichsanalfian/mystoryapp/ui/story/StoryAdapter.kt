@@ -59,8 +59,6 @@ class StoryAdapter :
 
 
     }
-
-    //    override fun getItemCount() = listStory.size
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListStoryItem>() {
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {

@@ -6,7 +6,6 @@ import com.ichsanalfian.mystoryapp.model.UserModel
 import com.ichsanalfian.mystoryapp.remote.StoryRepository
 
 class MainViewModel(private val repository: StoryRepository) : ViewModel() {
-
     fun getUser(): LiveData<UserModel> {
         return repository.getUser()
     }

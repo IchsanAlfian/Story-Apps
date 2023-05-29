@@ -10,11 +10,13 @@ import kotlinx.coroutines.launch
 
 class MapsViewModel(private val repository: StoryRepository) : ViewModel() {
     val story: LiveData<StoryResponse> = repository.story
-    fun getLocation(token : String) {
+    val isLoading: LiveData<Boolean> = repository.isLoading
+    fun getLocation(token: String) {
         viewModelScope.launch {
-            repository.getLocationStory(token,1)
+            repository.getLocationStory(token, 1)
         }
     }
+
     fun getUser(): LiveData<UserModel> {
         return repository.getUser()
     }
